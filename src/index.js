@@ -9,7 +9,7 @@ async function getFile(filePath) {
     try {
         const enconding = 'utf-8';
         const text = await fs.promises.readFile(filePath, enconding);
-        console.log(getLinks(text));
+        return getLinks(text);
 
     } catch(error) {
         catchError(error);
@@ -22,9 +22,7 @@ function getLinks(texto) {
     const regex = /\[([^[\]]*?)\]\((https?:\/\/[^\s?#.].[^\s]*)\)/gm;
     const capturas = [...texto.matchAll(regex)];
     const resultados = capturas.map(captura => ({[captura[1]]: captura[2]}));
-    return resultados;
+    return resultados.length > 0 ? resultados : ["Não foram encontrados Links no arquivo!"];
 }
 
-// /\[([^[\]]*?)\]\((https?:\/\/[^\s?#.].[^\s]*)\)/gm;
-
-getFile('./arquivos/texto.md');
+export default getFile;
