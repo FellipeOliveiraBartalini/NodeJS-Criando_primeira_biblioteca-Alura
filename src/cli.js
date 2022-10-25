@@ -11,6 +11,15 @@ function imprimeLista(resultado) {
 async function processaTexto(argumentos) {
     const caminho = argumentos[2];
 
+    try {
+        fs.lstatSync(caminho);
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            console.error(chalk.red("404 - Arquivo ou diretório não existe!"));
+            return;
+        }
+    }
+
     if (fs.lstatSync(caminho).isFile()) {
         const resultado = await getFile(caminho);
         console.log(chalk.yellow('lista de links:'), (resultado));
